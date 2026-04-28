@@ -1,5 +1,6 @@
 import React from 'react'
 import Hero from '../components/Hero'
+import SpecialitySec from '../components/SpecialitySec'
 
 const Home = () => {
   return (
@@ -7,6 +8,7 @@ const Home = () => {
 
       <Hero />
 
+      <SpecialitySec />
       
     </div>
   )
