@@ -16,7 +16,9 @@ const Header = () => {
       <img
         src={logo}
         alt=""
-        className='w-44 cursor-pointer' />
+        className='w-44 cursor-pointer'
+        onClick={()=> {navigate('/')}}
+         />
 
       <ul className='hidden md:flex md:gap-6 font-medium'>
 
