@@ -1,12 +1,14 @@
-import React from 'react'
-import { doctors } from '../assets/images/assets_frontend/assets'
+import React, { useContext } from 'react'
+// import { doctors } from '../assets/images/assets_frontend/assets'
 import { ImEarth } from 'react-icons/im'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
 
 
 const TopDoctors = () => {
 
     const navigate = useNavigate()
+    const { doctors } = useContext(AppContext)
 
     return (
         <div className=' my-8 flex flex-col items-center gap-4 text-gray-900 md:mx-10'>
@@ -29,7 +31,7 @@ const TopDoctors = () => {
                     </div>
                 ))}
             </div>
-            <button className='bg-blue-200 px-12 py-3 rounded-full'>more</button>
+            <button onClick={() => { navigate('/doctors'); scrollTo(0, 0) }} className='bg-blue-200 px-12 py-3 rounded-full'>more</button>
 
         </div>
     )

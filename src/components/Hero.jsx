@@ -16,7 +16,7 @@ const Hero = () => {
 
             {/* left side  */}
             <div className='md:w-1/2 flex flex-col gap-6 justify-center items-center md:items-start py-10 m-auto '>
-                <p className='text-3xl md:text-3xl lg:text-4xl xl:5xl font-semibold leading-snug'>Book Appointment <br /> With Trusted Doctors</p>
+                <p  className='text-3xl md:text-3xl lg:text-4xl xl:5xl font-semibold leading-snug'>Book Appointment <br /> With Trusted Doctors</p>
 
                 <div className='flex flex-col justify-between md:flex-row items-center h-auto  w-3/4 md:w-auto gap-3  text-sm font-light'>
                     <img src={groupPic} alt="An group image" className='w-28' />
