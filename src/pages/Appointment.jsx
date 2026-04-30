@@ -80,7 +80,7 @@ const Appointment = () => {
   }, [docInfo])
 
   useEffect(() => {
-    console.log(docSlot)
+    // console.log(docSlot)
   }, [docSlot])
 
   return docInfo && (
