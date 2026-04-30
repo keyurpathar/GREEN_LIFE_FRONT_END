@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import RelatedDoctors  from '../components/RelatedDoctors'
 
 
 const Appointment = () => {
@@ -44,7 +45,7 @@ const Appointment = () => {
       endTime.setHours(21, 0, 0, 0)
 
 
-      if (today.getDate() === currentDate.getDate()) {
+      if (today.getDate() === currentDate.getDate() > 30) {
         currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10)
         currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0)
       }
@@ -63,9 +64,6 @@ const Appointment = () => {
         })
 
         currentDate.setMinutes(currentDate.getMinutes() + 30)
-
-
-
       }
 
       setdocSlot(prev => ([...prev, timeSlots]))
@@ -135,7 +133,21 @@ const Appointment = () => {
           }
         </div>
 
+        <div className='flex items-center gap-3 w-full overflow-x-scroll mt-4'>
+          {docSlot.length && docSlot[slotIndex].map((item,indx) => (
+              <p
+              onClick={() => setslotTime(item.time)} 
+               className={`text-sm font-light shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-[#5f6fff] text-white' : 'text-gray-400 border border-gray-500'}`} key={indx}>
+                {item.time.toLowerCase()}
+              </p>
+          ))}
+        </div>
+
+        <button className='bg-[#5f6fff] text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an Appointment</button>
+
       </div>
+
+      <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
 
     </div>
   )
