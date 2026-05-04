@@ -67,7 +67,7 @@ const Header = () => {
             </div>
             :
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/register')}
               className='bg-[#5F6FFF] text-white px-8 py-2 rounded-full font-light hidden md:block'
             >
               Create Account

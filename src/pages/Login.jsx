@@ -1,21 +1,18 @@
-import { useFormik } from "formik"
-import { Link } from "react-router-dom"
+import React from 'react'
+import { useFormik } from 'formik'
 import * as Yup from 'yup'
-
+import { Link } from 'react-router-dom'
 
 const Login = () => {
 
   const validationSchema = Yup.object({
-    name: Yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required')
   })
 
-
   const formik = useFormik({
 
     initialValues: {
-      name: '',
       email: '',
       password: '',
     },
@@ -38,11 +35,10 @@ const Login = () => {
         className="border border-gray-300 rounded-lg shadow my-8 w-fit py-8 px-6 md:px-10 flex flex-col gap-4"
       >
         <div>
-          <h1 className="text-xl capitalize font-medium text-gray-600">create account</h1>
-          <p className="text-gray-500 text-sm">Please sign up to book appointment</p>
+          <h1 className="text-xl capitalize font-medium text-gray-600">Login here</h1>
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="name" className="text-gray-700">Full Name</label> <br />
           <input
             type="text"
@@ -55,7 +51,7 @@ const Login = () => {
           {formik.touched.name && formik.errors.name &&
             (<p className="text-red-500 text-sm mt-1 transition-all duration-200">{formik.errors.name}</p>)
           }
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor="email" className="text-gray-700">Email</label> <br />
@@ -89,9 +85,9 @@ const Login = () => {
 
         <div className="flex flex-col justify-center items-center gap-3">
 
-          <p className="text-gray-600 text-sm capitalize">already have an account ?
-            <Link to={'/login'} className="underline text-blue-500">  login here</Link></p>
-          <button type="submit" className=" text-white px-6 py-2 rounded bg-[#5F6FFF] active:scale-95 transition-all duration-200 capitalize">create account</button>
+          <p className="text-gray-600 text-sm capitalize">dont't have an account ?
+            <Link to={'/register'} className="underline text-blue-500"> register here</Link></p>
+          <button type="submit" className=" text-white px-6 py-2 rounded bg-[#5F6FFF] active:scale-95 transition-all duration-200 capitalize">login</button>
         </div>
 
 

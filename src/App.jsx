@@ -10,6 +10,7 @@ import MyAppointments from './pages/MyAppointments'
 import Appointment from './pages/Appointment'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Register from './pages/Register'
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/doctors' element={<Doctors />} />
         <Route path='/doctors/:speciality' element={<Doctors />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route path='/myprofile' element={<MyProfile />} />
         <Route path='/myappointments' element={<MyAppointments />} />
         <Route path='/appointment/:docId' element={<Appointment />} />
