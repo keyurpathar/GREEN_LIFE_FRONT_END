@@ -1,24 +1,26 @@
 import React, { useState } from 'react'
 import logo from '../assets/images/assets_frontend/logo.svg'
 import userProfileImg from '../assets/images/assets_frontend/profile_pic.png'
+import close from '../assets/images/assets_frontend/cross_icon.png'
 import dropdownicon from '../assets/images/assets_frontend/dropdown_icon.svg'
+import menu from '../assets/images/assets_frontend/menu_icon.svg'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
 const Header = () => {
 
   const navigate = useNavigate()
 
-  const [setshowMenu, setSetshowMenu] = useState()
+  const [showMenu, setshowMenu] = useState()
   const [token, settoken] = useState(true)
 
   return (
-    <div className='flex item-center py-4 justify-between text-sm border-b border-gray-400'>
+    <div className='flex item-center py-4 px-1 justify-between text-sm border-b border-gray-400'>
       <img
         src={logo}
         alt=""
         className='w-44 cursor-pointer'
-        onClick={()=> {navigate('/')}}
-         />
+        onClick={() => { navigate('/') }}
+      />
 
       <ul className='hidden md:flex md:gap-6 font-medium'>
 
@@ -43,7 +45,7 @@ const Header = () => {
         </NavLink>
       </ul>
 
-      <div>
+      <div className='flex gap-6'>
         {
           token ?
 
@@ -73,6 +75,27 @@ const Header = () => {
               Create Account
             </button>
         }
+
+        <img
+          onClick={() => setshowMenu(true)}
+          className='w-6 md:hidden'
+          src={menu}
+          alt="An menu icon" />
+
+        {/* mobile menu  */}
+
+        <div className={` ${showMenu ? 'fixed w-full' : 'h-0 w-0'}  md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-150`}>
+          <div className='flex justify-between items-center px-5 py-6'>
+            <img className='w-36' src={logo} alt="" />
+            <img className='w-7' onClick={(() => setshowMenu(false))} src={close} alt="" />
+          </div>
+          <ul className='flex flex-col items-center mt-5 gap-2 px-5 text-lg font-medium'>
+            <NavLink onClick={() => { setshowMenu(false) }} className='px-4 py-2 rounded inline-block' to={'/'}> <p className='px-4 py-2 rounded inline-block'>Home</p> </NavLink>
+            <NavLink onClick={() => { setshowMenu(false) }} className='px-4 py-2 rounded inline-block' to={'/doctors'}><p className='px-4 py-2 rounded inline-block'>All Doctors</p></NavLink>
+            <NavLink onClick={() => { setshowMenu(false) }} className='px-4 py-2 rounded inline-block' to={'/about'}><p className='px-4 py-2 rounded inline-block'>About</p></NavLink>
+            <NavLink onClick={() => { setshowMenu(false) }} className='px-4 py-2 rounded inline-block' to={'/contact'}><p className='px-4 py-2 rounded inline-block'>Contact</p></NavLink>
+          </ul>
+        </div>
 
       </div>
 
