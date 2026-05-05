@@ -13,6 +13,8 @@ const Doctors = () => {
 
   const [filter, setfilter] = useState([])
 
+  const [showFilter , setShoeFilter] = useState(false)
+
   const applyFilter = () => {
     if (speciality) {
       setfilter(doctors.filter(doc => doc.speciality == speciality))
@@ -34,7 +36,9 @@ const Doctors = () => {
 
       <div className='flex flex-col text-center md:flex-row gap-4 my-8'>
 
-        <div className='text-[#4B5563] flex flex-col gap-3'>
+        <button className={`py-1 px-3 border rounded text-sm transition-all md:hidden  ${showFilter ? 'bg-blue-700 text-white' : ''}`} onClick={() => setShoeFilter(prev => !prev)}>Filters</button>
+
+        <div className={`text-[#4B5563] flex flex-col gap-3 ${showFilter ? 'flex' : 'hidden sm:flex'}`}>
           <p onClick={() => { speciality === 'General physician' ? navigate('/doctors') : navigate('/doctors/General physician') }} className='border border-gray-400 rounded-lg px-8 py-2  transition-all duration-200 hover:bg-[#E2E5FF] cursor-pointer'>General physician</p>
 
           <p onClick={() => { speciality === 'Gynecologist' ? navigate('/doctors') : navigate('/doctors/Gynecologist') }} className='border border-gray-400 rounded-lg px-8 py-2  transition-all duration-200 hover:bg-[#E2E5FF] cursor-pointer'>Gynecologist</p>
