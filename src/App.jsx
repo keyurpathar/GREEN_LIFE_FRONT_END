@@ -11,10 +11,13 @@ import Appointment from './pages/Appointment'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Register from './pages/Register'
+ import { ToastContainer, toast } from 'react-toastify';
 
 const App = () => {
   return (
     <div className='mx-1 md:mx-8 md:px-8'>
+
+      <ToastContainer />
 
       <Header />
 

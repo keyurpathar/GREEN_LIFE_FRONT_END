@@ -110,7 +110,7 @@ const Appointment = () => {
           </div>
 
           <div>
-            <h3 className='text-gray-500'>Appointment Fees : <span className='text-xl text-black'> {currencySymbol}{docInfo.fees} </span>  </h3>
+            <h3 className='text-gray-500'>Appointment Fees : <span className='text-xl text-black'> {currencySymbol}{docInfo.fee} </span>  </h3>
           </div>
 
         </div>

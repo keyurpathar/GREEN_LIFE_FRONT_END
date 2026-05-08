@@ -25,7 +25,7 @@ const RelatedDoctors = ({ docId, speciality }) => {
         <div className='w-full grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
           {relDoc.slice(0, 4).map((item) => (
             <div
-              key={item._id}   // ← added missing key prop
+              key={item._id} 
               onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }}
               className='border rounded-lg border-gray-300 cursor-pointer hover:-translate-y-1 transition-all duration-200'
             >
