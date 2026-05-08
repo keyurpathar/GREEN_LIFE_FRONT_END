@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Link } from 'react-router-dom'
+import { Link , useNavigate } from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
+
+  const { backendurl , setToken } = useContext(AppContext)
+  const navigate = useNavigate()
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -19,9 +25,21 @@ const Login = () => {
 
     validationSchema,
 
-    onSubmit: (val, { resetForm }) => {
-      console.log(val)
-      resetForm()
+    onSubmit: async (val, { resetForm }) => {
+      
+      try {
+        const response = await axios.post(backendurl + '/user/login' , val)
+        if(response.data.success){
+          setToken(response.data.token)
+          localStorage.setItem('token' , response.data.token)
+          toast.success(response.data.message)
+          resetForm()
+          navigate('/')
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error(error.response?.data?.message || error.message)
+      }
     }
 
   })

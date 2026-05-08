@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { AppContext } from '../context/AppContext'
 import logo from '../assets/images/assets_frontend/logo.svg'
 import userProfileImg from '../assets/images/assets_frontend/profile_pic.png'
 import close from '../assets/images/assets_frontend/cross_icon.png'
@@ -11,8 +12,8 @@ const Header = () => {
 
   const navigate = useNavigate()
 
+  const { token, setToken } = useContext(AppContext)
   const [showMenu, setshowMenu] = useState()
-  const [token, settoken] = useState(true)
   const [showDropdown, setShowDropdown] = useState(false)
   return (
     <div className='flex item-center py-4 px-1 justify-between text-sm border-b border-gray-400'>
@@ -42,7 +43,7 @@ const Header = () => {
                   <div className='min-w-48 bg-stone-100 rounded-lg flex flex-col gap-4 p-3'>
                     <p className='hover:cursor-pointer hover:text-black' onClick={() => { navigate('/myprofile'); setShowDropdown(false) }}>My Profile</p>
                     <p className='hover:cursor-pointer hover:text-black' onClick={() => { navigate('/myappointments'); setShowDropdown(false) }}>My Appointments</p>
-                    <p className='hover:cursor-pointer hover:text-black' onClick={() => settoken(false)}>Logout</p>
+                    <p className='hover:cursor-pointer hover:text-black' onClick={() => { setToken(''); localStorage.removeItem('token'); setShowDropdown(false) }}>Logout</p>
                   </div>
                 </div>
               )}

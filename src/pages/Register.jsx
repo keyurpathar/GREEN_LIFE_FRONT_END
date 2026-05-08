@@ -1,9 +1,14 @@
 import { useFormik } from "formik"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import * as Yup from 'yup'
-
+import { useContext } from "react"
+import { AppContext } from "../context/AppContext"
+import axios from "axios"
+import { toast } from "react-toastify"
 
 const Register = () => {
+  const { backendurl, setToken } = useContext(AppContext)
+  const navigate = useNavigate()
 
   const validationSchema = Yup.object({
     name: Yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),
@@ -22,9 +27,20 @@ const Register = () => {
 
     validationSchema,
 
-    onSubmit: (val, { resetForm }) => {
-      console.log(val)
-      resetForm()
+    onSubmit: async (val, { resetForm }) => {
+      try {
+        const response = await axios.post(backendurl + '/user/register', val)
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+          toast.success(response.data.message)
+          resetForm()
+          navigate('/')
+        }
+      } catch (error) {
+        console.log(error)
+        toast.error(error.response?.data?.message || error.message)
+      }
     }
 
   })

@@ -13,10 +13,9 @@ const AppContextProvider = ({ children }) => {
 
     const [doctors, setdoctors] = useState([])
 
-    const value = {
-        doctors , currencySymbol
-    }
+    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
 
+   
     const getDoctorData = async () => {
 
         try {
@@ -34,6 +33,11 @@ const AppContextProvider = ({ children }) => {
             toast.error(error.message)
         }
     }
+
+     const value = {
+        doctors , currencySymbol , token , setToken ,backendurl
+    }
+
 
     useEffect(() => {
         getDoctorData()
