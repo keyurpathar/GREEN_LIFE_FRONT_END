@@ -1,31 +1,71 @@
-import React, { useState } from 'react'
-import img from '../assets/images/assets_frontend/profile_pic.png'
+import React, { useState, useEffect, useContext } from 'react'
+import { AppContext } from '../context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const MyProfile = () => {
 
-  const [userData, setUserData] = useState({
+  const {userData: uData, setuserData: setUdata, backendurl, token, loadUserData} = useContext(AppContext)
 
-    name: "Keyur",
-    image: img,
-    email: "keyur@gmail.com",
-    phone: "+91 90813 94875",
-    address: {
-      lin1: "804 megh-malhar",
-      lin2: "Vraj chowk , Nana varachha Surat"
-    },
-    gender: "Male",
-    dob: "29-08-2005"
+  const [userData, setUserData] = useState(false)
+  const [isEdit, setisEdit] = useState(false)
+  const [image, setImage] = useState(false)
 
-  })
+  useEffect(() => {
+    if (uData) {
+      setUserData({
+        ...uData,
+        address: uData.address || { line1: '', line2: '' }
+      })
+    }
+  }, [uData])
 
-  const [isEdit, setisEdit] = useState(true)
+  const updateUserProfileData = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('name', userData.name)
+      formData.append('phone', userData.phone)
+      formData.append('address', JSON.stringify(userData.address))
+      formData.append('gender', userData.gender)
+      formData.append('dob', userData.dob)
+      
+      if(image) {
+          formData.append('image', image)
+      }
 
-  return (
+      const { data } = await axios.post(backendurl + '/user/profile/update', formData, {headers: {token}})
+
+      if (data.success) {
+        toast.success(data.message)
+        await loadUserData()
+        setisEdit(false)
+        setImage(false)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data?.message || error.message)
+    }
+  }
+
+  return uData && userData && (
     <div className='max-w-lg flex flex-col gap-2 text-sm my-10 '>
 
       <div>
 
-        <img src={userData.image} alt="An user image" className='w-36 rounded' />
+        {
+          isEdit ? (
+            <label htmlFor="image">
+              <div className='inline-block relative cursor-pointer'>
+                <img src={image ? URL.createObjectURL(image) : userData.image} alt="" className='w-36 rounded opacity-75' />
+              </div>
+              <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden />
+            </label>
+          ) : (
+            <img src={userData.image} alt="An user image" className='w-36 rounded' />
+          )
+        }
 
         {
           isEdit ?
@@ -41,7 +81,7 @@ const MyProfile = () => {
         <div>
           <p className='uppercase text-neutral-500 underline mt-3'>contact information</p>
 
-          <div className='grid grid-col-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700'>
+          <div className='grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700'>
             <p className='font-medium'>Email id: </p>
             <p className='text-blue-500'>{userData.email}</p>
             <p className='font-medium'>Phone : </p>
@@ -60,20 +100,20 @@ const MyProfile = () => {
                 <p>
                   <input 
                   className='bg-gray-50'
-                  onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, lin1: e.target.value } }))} 
-                  value={userData.address.lin1} 
+                  onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line1: e.target.value } }))} 
+                  value={userData.address.line1} 
                   type="text" />
                   <br />
                   <input 
                   className='bg-gray-50'
-                  onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, lin2: e.target.value } }))} 
-                  value={userData.address.lin2} 
+                  onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line2: e.target.value } }))} 
+                  value={userData.address.line2} 
                   type="text" />
                 </p> :
                 <p className='text-gray-500'>
-                  {userData.address.lin1}
+                  {userData.address.line1}
                   <br />
-                  {userData.address.lin2}
+                  {userData.address.line2}
                 </p>
             }
 
@@ -104,7 +144,7 @@ const MyProfile = () => {
 
       <div className='mt-10 '>
         {
-          isEdit ? <button className='border border-blue-500 px-8 py-2 rounded-full  capitalize hover:bg-blue-600 transition-all duration-200 hover:text-white  ' onClick={() => { setisEdit(false) }}>save information</button> : <button className='border border-blue-500 px-8 py-2 hover:bg-blue-600 transition-all duration-200 hover:text-white rounded-full capitalize'   onClick={() => { setisEdit(true) }}>edit</button>
+          isEdit ? <button className='border border-blue-500 px-8 py-2 rounded-full  capitalize hover:bg-blue-600 transition-all duration-200 hover:text-white  ' onClick={updateUserProfileData}>save information</button> : <button className='border border-blue-500 px-8 py-2 hover:bg-blue-600 transition-all duration-200 hover:text-white rounded-full capitalize'   onClick={() => { setisEdit(true) }}>edit</button>
         }
       </div>
 

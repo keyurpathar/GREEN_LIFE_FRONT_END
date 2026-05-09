@@ -15,33 +15,59 @@ const AppContextProvider = ({ children }) => {
 
     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
 
-   
+    const [userData, setuserData] = useState(false)
+
+
     const getDoctorData = async () => {
 
         try {
 
-            const {data} = await axios.get(backendurl + '/doctor/list')
+            const { data } = await axios.get(backendurl + '/doctor/list')
             // console.log(data)
 
-            if(data.success){
+            if (data.success) {
 
                 setdoctors(data.doctors)
             }
-            
+
         } catch (error) {
             console.log(error)
-            toast.error(error.message)
+            toast.error(error.response?.data?.message || error.message)
         }
     }
 
-     const value = {
-        doctors , currencySymbol , token , setToken ,backendurl
+    const loadUserData = async () => {
+        try {
+            const { data } = await axios.get(backendurl + '/user/profile', { headers: { token } })
+            if (data.success) {
+                setuserData(data.data)
+            }
+            else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response?.data?.message || error.message)
+        }
+    }
+
+    const value = {
+        doctors, currencySymbol, token, setToken, backendurl, userData, loadUserData, setuserData
     }
 
 
     useEffect(() => {
         getDoctorData()
-    } , [])
+    }, [])
+
+    useEffect(() => {
+        if (token) {
+            loadUserData()
+        }
+        else {
+            setuserData(false)
+        }
+    }, [token])
 
     return (
         <AppContext.Provider value={value}>
