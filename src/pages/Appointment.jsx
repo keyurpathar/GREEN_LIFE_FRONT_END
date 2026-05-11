@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import RelatedDoctors  from '../components/RelatedDoctors'
+import RelatedDoctors from '../components/RelatedDoctors'
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 
 const Appointment = () => {
 
   const { docId } = useParams()
 
-  const { doctors, currencySymbol } = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const { doctors, currencySymbol, backendurl, token, getDoctorData } = useContext(AppContext)
 
   const [docInfo, setdocInfo] = useState(null)
 
@@ -68,6 +72,49 @@ const Appointment = () => {
 
       setdocSlot(prev => ([...prev, timeSlots]))
 
+    }
+  }
+
+  const bookAppointment = async () => {
+    try {
+
+      if (!token) {
+        toast.warn("Please Login First")
+        return navigate('/login')
+
+      }
+
+      try {
+
+        const date = docSlot[slotIndex][0].dateTime
+
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+
+        let year = date.getFullYear()
+
+        let slotDate = `${year}-${month}-${day}`
+
+        const { data } = await axios.post(backendurl + '/user/bookAppointment', {
+          docId, slotDate, slotTime
+        }, { headers: { token } })
+
+        if (data.success) {
+          toast.success(data.message)
+          getDoctorData()
+          navigate('/myappointments')
+        }
+        else {
+          toast.error(data.message)
+        }
+
+      } catch (error) {
+        toast.error(error.response?.data?.message || error.message)
+
+      }
+
+    } catch (error) {
+      toast.error(error.message)
     }
   }
 
@@ -134,16 +181,16 @@ const Appointment = () => {
         </div>
 
         <div className='flex items-center gap-3 w-full overflow-x-scroll mt-4'>
-          {docSlot.length && docSlot[slotIndex].map((item,indx) => (
-              <p
-              onClick={() => setslotTime(item.time)} 
-               className={`text-sm font-light shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-[#5f6fff] text-white' : 'text-gray-400 border border-gray-500'}`} key={indx}>
-                {item.time.toLowerCase()}
-              </p>
+          {docSlot.length && docSlot[slotIndex].map((item, indx) => (
+            <p
+              onClick={() => setslotTime(item.time)}
+              className={`text-sm font-light shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-[#5f6fff] text-white' : 'text-gray-400 border border-gray-500'}`} key={indx}>
+              {item.time.toLowerCase()}
+            </p>
           ))}
         </div>
 
-        <button className='bg-[#5f6fff] text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an Appointment</button>
+        <button onClick={bookAppointment} className='bg-[#5f6fff] text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an Appointment</button>
 
       </div>
 
