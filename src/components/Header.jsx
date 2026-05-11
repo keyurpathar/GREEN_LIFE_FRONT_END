@@ -12,7 +12,8 @@ const Header = () => {
 
   const navigate = useNavigate()
 
-  const { token, setToken } = useContext(AppContext)
+  const { token, setToken, userData } = useContext(AppContext)
+
   const [showMenu, setshowMenu] = useState()
   const [showDropdown, setShowDropdown] = useState(false)
   return (
@@ -35,7 +36,7 @@ const Header = () => {
         {
           token ?
             <div className='flex gap-2 item-center cursor-pointer relative' onClick={() => setShowDropdown(!showDropdown)}> 
-              <img src={userProfileImg} alt="" className='rounded-full w-8' />
+              <img src={userData?.image ? userData.image : userProfileImg} alt="" className='rounded-full w-8 h-8 object-cover' />
               <img src={dropdownicon} className='w-2.5' alt="" />
 
               {showDropdown && (
@@ -67,6 +68,11 @@ const Header = () => {
             <NavLink onClick={() => setshowMenu(false)} className='px-4 py-2 rounded inline-block' to={'/doctors'}><p className='px-4 py-2 rounded inline-block'>All Doctors</p></NavLink>
             <NavLink onClick={() => setshowMenu(false)} className='px-4 py-2 rounded inline-block' to={'/about'}><p className='px-4 py-2 rounded inline-block'>About</p></NavLink>
             <NavLink onClick={() => setshowMenu(false)} className='px-4 py-2 rounded inline-block' to={'/contact'}><p className='px-4 py-2 rounded inline-block'>Contact</p></NavLink>
+            {!token && (
+              <button onClick={() => { navigate('/register'); setshowMenu(false); }} className='bg-[#5F6FFF] text-white px-8 py-2 rounded-full font-light mt-4'>
+                Create Account
+              </button>
+            )}
           </ul>
         </div>
       </div>
